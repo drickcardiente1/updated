@@ -1,0 +1,499 @@
+{% extends "validation_base.html" %}
+<!-- base -->
+{% block tittle %}REGISTRATION{% endblock %}
+<!-- tittle -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <div class="navbar-toggle d-inline">
+                <button type="button" class="navbar-toggler">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button>
+            </div>
+            <a class="navbar-brand" style="color: white;">TE MOTORBIKES SIGN UP</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link text-primary">
+                        <i class="tim-icons icon-minimal-left"></i> Back To Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+<!-- navbar -->
+{% block content %}
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 ml-auto">
+                <div class="info-area info-horizontal mt-5">
+                    <div class="icon icon-warning">
+                        <i class="tim-icons icon-wifi"></i>
+                    </div>
+                    <div class="description">
+                        <h3 class="info-title">Marketing</h3>
+                        <p class="description">
+                            We've created the marketing campaign of the website. It was a very interesting
+                            collaboration.
+                        </p>
+                    </div>
+                </div>
+                <div class="info-area info-horizontal">
+                    <div class="icon icon-primary">
+                        <i class="tim-icons icon-triangle-right-17"></i>
+                    </div>
+                    <div class="description">
+                        <h3 class="info-title">Fully Coded in HTML5</h3>
+                        <p class="description">
+                            We've developed the website with HTML5 and CSS3. The client has access to the code using
+                            GitHub.
+                        </p>
+                    </div>
+                </div>
+                <div class="info-area info-horizontal">
+                    <div class="icon icon-info">
+                        <i class="tim-icons icon-trophy"></i>
+                    </div>
+                    <div class="description">
+                        <h3 class="info-title">Built Audience</h3>
+                        <p class="description">
+                            There is also a Fully Customizable CMS Admin Dashboard for this product.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mr-auto">
+                <div class="card card-register card-white">
+                    <div class="card-header">
+                        <img class="card-img" src="/static/img/card-primary.png" alt="Card image">
+                        <h4 class="card-title" style="font-size: 2rem;">Registration Form</h4>
+                    </div>
+                    <form class="form" method="post" id="RegisterValidation">
+                        {% csrf_token %}
+                        <div class="card-body ml-auto">
+                            <div class="card-footer text-center" style="margin: 0; padding: 0;">
+                                <div class="row" style="margin-bottom:0;">
+                                    <div class="col-6 ">
+                                        <div class="input-group">
+                                            <div class="text-left">
+                                                Already member ?
+                                                <a href="{% url 'login' %}">login </a>
+                                                here.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" style="margin: 0; padding: 0;" id="timer">
+                                        <p id="otp_msg" style="color: red;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p id="mailmessage" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group" id="mail">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tim-icons icon-email-85"></i>
+                                    </div>
+                                </div>
+                                {{ form.email }}
+                                <a class="btn btn-primary btn-sm ml-3" id="send" style="color:white;"
+                                    onclick="snd();">Send Code</a>
+                            </div>
+                            <p id="uname_message" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tim-icons icon-single-02"></i>
+                                    </div>
+                                </div>
+                                {{ form.username }}
+                            </div>
+                            <p id="name_message" class="input-group" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tim-icons icon-single-02"></i>
+                                    </div>
+                                </div>
+                                {{ form.first_name }}
+                            </div>
+                            <p id="last_name_message" class="input-group" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tim-icons icon-single-02"></i>
+                                    </div>
+                                </div>
+                                {{ form.last_name }}
+                            </div>
+                            <p id="mobile_message" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tim-icons icon-badge"></i>
+                                    </div>
+                                </div>
+                                {{ form.mobile }}
+                            </div>
+                            <p id="pwd_message" style="margin: 0; color: red;">
+                            </p>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="tim-icons icon-lock-circle" data-toggle="#pwd" id="tagler"
+                                            style="color:black;"></span>
+                                    </div>
+                                </div>
+                                {{ form.password1 }}
+                            </div>
+                            <div class="form-check text-center" style="margin: 0;">
+                                <label class="form-check-label">
+                                    {{ form.receive_notif }}
+                                    <span class="form-check-sign"></span>I'd like to receive exclusive offers and
+                                    promotions via
+                                    <a href="javascript:void(0)">email</a>.
+                                </label>
+                                <div class="text-center">
+                                    <a class="btn btn-primary btn-round btn-lg" style="color: white;"
+                                        onclick="sbmt()">SUBMIT</a>
+                                    <br>
+                                    <div class="text-center">
+                                        OR
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                    <div class="card-footer text-center" style="margin: 0; padding-top: 0;">
+                        <div class="row">
+                            <div class="col-6">
+                                <a class="btn btn-simple btn-facebook">
+                                    Connect with Facebook
+                                    <i class="fab fa-facebook-square"></i>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a class="btn btn-simple btn-google" href=""
+                                    onclick=" PopCenter(this.href,'targetWindow','500','500', {toolbar:0, resizable:0, location:0, menubar:0, status:0});return false">
+                                    <i class="fab fa-google-plus-g"></i>
+                                    Connect with Google+
+                                </a>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="text-left">
+                            By proceeding to sign up, I acknowledge that I have read and consented to TE Motorbike’s<a
+                                href="">Terms of Use</a> and <a href="">Privacy Policy</a> , which sets out how TE
+                            Motorbike’s collects, uses and discloses my personal data, and the rights that I have under
+                            applicable law.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- content -->
+{% block scripts %}
+<link rel="stylesheet" href="sweetalert2.min.css" type="text/html">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="application/javascript"></script>
+<script src="/static/js/pop.js"></script>
+<script>
+    var ctmnts = 0;
+    var ctsecs = 0;
+    var startchr = 0;
+    function change_btn(to_remove, load, to_append) {
+        to_remove.remove();
+        to_append.append(load)
+    }
+    function open_input() {
+        change_btn($('#loading'), '{{ form.otp }}', $('#mail'));
+        $("#otp").click(function () {
+            document.getElementById('otp').style.removeProperty('border');
+            document.getElementById("otp_msg").innerHTML = "";
+        });
+        var inputBox = document.getElementById("otp");
+        var invalidChars = ["-", "+", "e",];
+        inputBox.addEventListener("input", function () {
+            this.value = this.value.replace(/[e\+\-]/gi, "");
+        });
+        inputBox.addEventListener("keydown", function (e) {
+            if (invalidChars.includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    }
+    function countdownTimer() {
+        if (startchr == 0) {
+            time = '<span id="showtime">Resend &nbsp;(<span id="showmns">00</span>:<span id="showscs">00</span>) </span>';
+            $('#timer').prepend(time);
+            open_input();
+            ctmnts = parseInt(2);
+            ctsecs = parseInt(0) * 1;
+            startchr = 1;
+        }
+        if (ctmnts == 0 && ctsecs == 0) {
+            startchr = 0;
+            document.getElementById('email').removeAttribute('disabled');
+            document.getElementById('showtime').remove();
+            load = '<a class="btn btn-primary btn-sm ml-3" id="send" style="color:white;" onclick="snd();">Send Code</a>';
+            change_btn($('#otp'), load, $('#mail'))
+            return false;
+        }
+        else {
+            ctsecs--;
+            if (ctsecs < 0) {
+                if (ctmnts > 0) {
+                    ctsecs = 59;
+                    ctmnts--;
+                }
+                else {
+                    ctsecs = 0;
+                    ctmnts = 0;
+                }
+            }
+        }
+        document.getElementById('showmns').innerHTML = ctmnts;
+        document.getElementById('showscs').innerHTML = ctsecs;
+        setTimeout('countdownTimer()', 1000);
+    }
+
+    function err_messages(set_border, message, message_target) {
+        set_border.style.borderColor = "red";
+        document.getElementById(message_target).innerHTML = message;
+    }
+
+    function snd() {
+        load = '<a class="btn btn-primary btn-sm ml-3" style="color: white;" disabled id="loading"><i class="fa fa-circle-o-notch fa-spin"></i> Sending</a>'
+        change_btn($('#send'), load, $('#mail'));
+        document.getElementById('email').setAttribute('disabled', 'disabled');
+        var data = $('#email').val();
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrftoken },
+            url: "{% url 'send_otpregistration' %}",
+            data: { 'data': JSON.stringify(data) },
+            cache: true,
+            success: function (response) {
+                var load = '<a class="btn btn-primary btn-sm ml-3" id="send" style="color:white;" onclick="snd();">Send Code</a>';
+                if (response == "success") {
+                    countdownTimer();
+                }
+                else {
+                    try {
+                        var data = JSON.parse(response);
+                        if (data.detail) {
+                            Swal.fire(
+                                'Error Code 403',
+                                data.detail,
+                                'error'
+                            )
+                            document.getElementById('email').removeAttribute('disabled');
+                            change_btn($('#loading'), load, $('#mail'));
+                        }
+                        else if (data.email) {
+                            Swal.fire(
+                                'Error Code 400',
+                                data.email[0],
+                                'error'
+                            )
+                            err_messages(document.getElementById("email"), data.email, "mailmessage")
+                            document.getElementById('email').removeAttribute('disabled');
+                            change_btn($('#loading'), load, $('#mail'));
+                        }
+                        else {
+                            Swal.fire(
+                                'Error Code 400',
+                                'Server configuration error',
+                                'error'
+                            )
+                            document.getElementById('email').removeAttribute('disabled');
+                            change_btn($('#loading'), load, $('#mail'));
+                        }
+                    }
+                    catch {
+                        Swal.fire(
+                            'Error Code 500',
+                            'Server configuration error',
+                            'error'
+                        )
+                        document.getElementById('email').removeAttribute('disabled');
+                        change_btn($('#loading'), load, $('#mail'));
+                    }
+                }
+            },
+            error: function (response) {
+                Swal.fire(
+                    'Error Code 400',
+                    'Server configuration error',
+                    'error'
+                )
+                document.getElementById('email').removeAttribute('disabled');
+                document.getElementById('showtime').remove();
+                load = '<a class="btn btn-primary btn-sm ml-3" id="send" style="color:white;" onclick="snd();">Send Code</a>';
+                change_btn($('#otp'), load, $('#mail'))
+            },
+        });
+    }
+</script>
+<script>
+    function sbmt() {
+        if (document.getElementById("receive_notif").checked) {
+            $("#receive_notif").val(true)
+        }
+        else {
+            $("#receive_notif").val(false)
+        }
+        var TableData = {
+            "email": $("#email").val()
+            , "otp": $("#otp").val()
+            , "username": $("#username").val()
+            , "first_name": $("#first_name").val()
+            , "last_name": $("#last_name").val()
+            , "mobile": $("#mobile").val()
+            , "password": $("#pwd").val()
+            , "receive_notifications": document.getElementById("receive_notif").value
+
+        };
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrftoken },
+            url: "{% url 'submit_register' %}",
+            data: { 'data': JSON.stringify(TableData) },
+            dataType: 'json',
+            cache: true,
+            success: function (response) {
+                if (response.email) {
+                    err_messages(document.getElementById("email"), response.email[0], "mailmessage")
+                }
+                if (response.username) {
+                    err_messages(document.getElementById("username"), response.username[0], "uname_message")
+                }
+                if (response.mobile) {
+                    err_messages(document.getElementById("mobile"), response.mobile[0], "mobile_message")
+                }
+                if (response.first_name) {
+                    err_messages(document.getElementById("first_name"), response.first_name[0], "name_message")
+                }
+                if (response.last_name) {
+                    err_messages(document.getElementById("last_name"), response.last_name[0], "last_name_message")
+                }
+                if (response.password) {
+                    err_messages(document.getElementById("pwd"), response.password[0], "pwd_message")
+                }
+                if (response.otp) {
+                    if (document.getElementById("otp")) {
+                        err_messages(document.getElementById("otp"), response.otp[0], "otp_msg")
+                    }
+                }
+                if (response == 201) {
+                    let timerInterval
+                    Swal.fire({
+                        title: "Creating user: " + TableData['username'],
+                        html: '<b></b> milliseconds.',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            Swal.fire({
+                                title: 'Please Wait',
+                                text: 'Loging In',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                }
+                            })
+                            var TData = {
+                                "username": TableData['username']
+                                , "password": TableData['password']
+
+                            };
+                            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                            $.ajax({
+                                type: 'POST',
+                                headers: { "X-CSRFToken": csrftoken },
+                                url: "{% url 'login_proccess' %}",
+                                data: { 'data': JSON.stringify(TData) },
+                                cache: true,
+                                success: function (response) {
+                                    data = JSON.parse(response)
+                                    if (data.username) {
+                                        err_messages(document.getElementById("username"), data.username[0], "uname_message")
+                                    }
+                                    if (data.password) {
+                                        err_messages(document.getElementById("pwd"), data.password[0], "pwd_message")
+                                    }
+                                    if (data.detail) {
+                                        Swal.fire({
+                                            title: 'Request failed: ' + data.detail,
+                                            showClass: {
+                                                popup: 'animate__animated animate__fadeInDown'
+                                            },
+                                            hideClass: {
+                                                popup: 'animate__animated animate__fadeOutUp'
+                                            }
+                                        })
+                                    }
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: 'Welcome ' + data['success'],
+                                            showClass: {
+                                                popup: 'animate__animated animate__fadeInDown'
+                                            },
+                                            hideClass: {
+                                                popup: 'animate__animated animate__fadeOutUp'
+                                            }
+                                        }).then((result) => {
+                                            location.reload()
+                                        })
+                                    }
+                                },
+                                error: function (response) {
+                                    console.log(response)
+                                },
+                            });
+                        }
+                    }).then((result) => {
+                        /* Read more about handling dismissals below */
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            console.log('I was closed by the timer')
+                        }
+                    })
+                }
+            },
+            error: function (response) {
+                alert(response.error)
+            },
+        });
+    }
+</script>
+<script src="/static/js/validate_msg.js"></script>
+<script src="/static/js/eye.js"></script>
+{% endblock %}

@@ -1,0 +1,660 @@
+{% extends "base.html" %}
+<!-- base -->
+{% block tittle %}HOME{% endblock %}
+<!-- tittle -->
+{% block sidebar %}
+<div class="navbar-minimize-fixed">
+    <button class="minimize-sidebar btn btn-link btn-just-icon">
+        <i class="tim-icons icon-align-center visible-on-sidebar-regular text-muted"></i>
+        <i class="tim-icons icon-bullet-list-67 visible-on-sidebar-mini text-muted"></i>
+    </button>
+</div>
+<div class="sidebar">
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <a rel="noopener noreferrer" href="{% url 'home' %}" class="simple-text logo-mini"> TR </a>
+            <a rel="noopener noreferrer" href="{% url 'home' %}" class="simple-text logo-normal"> Home </a>
+        </div>
+        <ul class="nav">
+            <li class="active">
+                <a href="/">
+                    <i class="tim-icons icon-chart-pie-36"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <li>
+                <a data-toggle="collapse" href="#mapsExamples">
+                    <i class="tim-icons icon-pin"></i>
+                    <p>
+                        Locations
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="mapsExamples">
+                    <ul class="nav">
+                        <li>
+                            <a href="/maps-google.html">
+                                <span class="sidebar-mini-icon">GM</span>
+                                <span class="sidebar-normal"> Google Maps </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/maps-fullscreen.html">
+                                <span class="sidebar-mini-icon">FM</span>
+                                <span class="sidebar-normal"> Full Screen Map </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/maps_vector.html">
+                                <span class="sidebar-mini-icon">VM</span>
+                                <span class="sidebar-normal"> Vector Map </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="/calendar.html">
+                    <i class="tim-icons icon-time-alarm"></i>
+                    <p>Calendar</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+<!-- sidebar -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <div class="navbar-minimize d-inline">
+                <button class="minimize-sidebar btn btn-link btn-just-icon" rel="tooltip" data-original-title="Sidebar toggle" data-placement="right">
+                    <i class="tim-icons icon-align-center visible-on-sidebar-regular"></i>
+                    <i class="tim-icons icon-bullet-list-67 visible-on-sidebar-mini"></i>
+                </button>
+            </div>
+            <div class="navbar-toggle d-inline">
+                <button type="button" class="navbar-toggler">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button>
+            </div>
+            <a class="navbar-brand">{{ direction }}</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button> {% if user.is_authenticated %}
+        <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+                <li class="dropdown nav-item">
+                    <a href="" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <div class="photo" style="height: 100%;">
+                            {% if user.is_authenticated %}
+                            <img src="/media/{{ user.profile_image }}" alt="Profile Photo" style="height: 4vh;"> {% else %}
+                            <i class="tim-icons icon-single-02 mt-1"></i> {% endif %}
+                        </div>
+                        <b class="caret d-none d-lg-block d-xl-block"></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-navbar">
+                        <li class="nav-link">
+                            <a href="{% url 'profile' %}" class="nav-item dropdown-item">Profile</a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="nav-link">
+                            <a href="" class="nav-item dropdown-item">Gallery</a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="nav-link">
+                            <a href="" class="nav-item dropdown-item">Settings</a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="nav-link">
+                            <a href="" class="nav-item dropdown-item">Transactions</a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="{% url 'logout' %}" class="nav-item dropdown-item">Log out</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="separator d-lg-none"></li>
+            </ul>
+        </div>
+        {% else %}
+        <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+                <li class="search-bar input-group">
+                    <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i
+                            class="tim-icons icon-zoom-split"></i>
+                        <span class="d-lg-none d-md-block">Search</span>
+                    </button>
+                </li>
+                <li class="dropdown nav-item">
+                    <a href="" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <div class="photo">
+                            <i class="tim-icons icon-single-02 mt-1"></i>
+                        </div>
+                        <b class="caret d-none d-lg-block d-xl-block"></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-navbar">
+                        <li class="nav-link">
+                            <a href="{% url 'login' %}" class="nav-item dropdown-item">Log in</a>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="nav-link">
+                            <a href="{% url 'signup' %}" class="nav-item dropdown-item">Sign up</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="separator d-lg-none"></li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+<div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="tim-icons icon-simple-remove"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- navbar -->
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="title">Edit Profile</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5 pr-md-1">
+                                <div class="form-group">
+                                    <label>UserID (disabled)</label>
+                                    <input type="text" class="form-control" disabled="" value="{{ user.id }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3 px-md-1">
+                                <div class="form-group">
+                                    <label>User Type (disabled)</label> {% if user.type == "A" or user.type == "a" %}
+                                    <input type="text" class="form-control" disabled="" value="ADMIN"> {% elif user.type == "C" or user.type == "c" %}
+                                    <input type="text" class="form-control" disabled="" value="RENTER"> {% else %}
+                                    <input type="text" class="form-control" disabled=""> {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pr-md-1">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control" placeholder="Home Address" value="{{ user.first_name|default_if_none:'' }}" name="first_name">
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-md-1">
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control" placeholder="Home Address" value="{{ user.last_name|default_if_none:'' }}" name="last_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" placeholder="Home Address" value="{{ user.address|default_if_none:'' }}" name="address">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 pr-md-1">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" class="form-control" placeholder="City" value="{{ user.city|default_if_none:'' }}" name="city">
+                                </div>
+                            </div>
+                            <div class="col-md-4 px-md-1">
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <input type="text" class="form-control" placeholder="Country" value="{{ user.country|default_if_none:'' }}" name="country">
+                                </div>
+                            </div>
+                            <div class="col-md-4 pl-md-1">
+                                <div class="form-group">
+                                    <label>Postal Code</label>
+                                    <input type="number" class="form-control" placeholder="ZIP Code" value="{{ user.zipcode|default_if_none:'' }}" name="zipcode" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>About Me</label> {% if user.About_Me == 'None' or user.About_Me == "" %}
+                                    <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" name="About_me" maxlength="700"></textarea> {% else %}
+                                    <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" name="About_me" maxlength="700">{{ user.About_Me }}</textarea> {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-fill btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="tools float-right">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-default dropdown-toggle btn-link btn-icon" data-toggle="dropdown">
+                        <i class="tim-icons icon-settings-gear-63"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" onclick="umg()">Upload image</a> {% if imgs %}
+                        <a class="dropdown-item" href="#" onclick="umg2()">Select from Gallery</a> {% else %}
+                        <a class="dropdown-item" href="#" onclick="mty()">Select from photos</a> {% endif %}
+                        <a class="dropdown-item" href="#" onclick="umg3()">Take a picture</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-user">
+                <div class="card-body">
+                    <p class="card-text">
+                        <div class="author">
+                            <div class="block block-one"></div>
+                            <div class="block block-two"></div>
+                            <div class="block block-three"></div>
+                            <div class="block block-four"></div>
+                            <a href="#" onclick="display()">
+                                <img class="avatar" src="/media/{{ user.profile_image }}">
+                            </a>
+                            <a>
+                                <h5 class="title">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                </h5>
+                            </a>
+                        </div>
+                    </p>
+                    <div class="card-description text-center">{{ user.About_Me }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    <!-- content -->
+    {% block footer %} {% include 'partials/footer.html' %} {% endblock %}
+    <!-- footer -->
+    {% block scripts %}
+    <script>
+        function mty() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No images detected!',
+                showConfirmButton: false,
+                showCloseButton: true,
+            })
+        }
+
+        function display() {
+            Swal.fire({
+                imageUrl: '/media/{{ user.profile_image }}',
+                imageWidth: 400,
+                imageHeight: 400,
+                imageAlt: 'Profile',
+                showConfirmButton: false,
+                showCloseButton: true,
+                title: 'Curent Profile',
+            })
+        }
+    </script>
+    <script>
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+        function selected(uimg) {
+            $.ajax({
+                type: 'POST',
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                url: "{% url 'update_profile_pic_from_saved' %}",
+                data: {
+                    'data': uimg
+                },
+                cache: true,
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Saved !',
+                        icon: 'success',
+                        html: 'Auto close in <b></b> milliseconds.',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    }).then(() => {
+                        location.reload();
+                    })
+                },
+                error: function(response) {
+                    console.log(response)
+                }
+            })
+        }
+    </script>
+    <script>
+        function umg3() {
+            Swal.fire({
+                title: 'Take a photo',
+                html: ' <video id="video" style="outline:none; width:95%; height:95%;" autoplay> <canvas id="canvas" style="outline:none; width:95%; height:95%;" ></canvas></video>',
+                showCloseButton: true,
+                focusConfirm: false,
+                width: 600,
+                confirmButtonText: '<i class="tim-icons icon-button-power"></i>',
+                didOpen: function() {
+                    let camera_button = document.querySelector("#start-camera");
+                    let video = document.querySelector("#video");
+
+                    function startup() {
+                        navigator.mediaDevices.getUserMedia({
+                                video: true,
+                                audio: false
+                            })
+                            .then(function(stream) {
+                                video.srcObject = stream;
+                                video.play();
+                            })
+                            .catch(function(err) {
+                                console.log("An error occurred: " + err);
+                            });
+                    }
+                    window.addEventListener('load', startup(), false);
+                },
+                preConfirm: (r) => {
+                    if (r == true) {
+                        let canvas = document.querySelector("#canvas");
+                        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                        let image_data_url = canvas.toDataURL('image/jpeg');
+                        const mediaStream = video.srcObject;
+                        const tracks = mediaStream.getTracks();
+                        tracks[0].stop();
+                        tracks.forEach(track => track.stop())
+                        return image_data_url
+                    }
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Please confirm',
+                        imageUrl: result.value,
+                        showCloseButton: true,
+                        focusConfirm: false,
+                        width: 600,
+                        imageWidth: 500,
+                        imageHeight: 400,
+                    }).then((r) => {
+                        if (r.isConfirmed) {
+                            var img3b64 = result.value;
+                            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                            $.ajax({
+                                type: 'POST',
+                                headers: {
+                                    "X-CSRFToken": csrftoken
+                                },
+                                url: "{% url 'save_profile_pic_from_take_picture' %}",
+                                data: {
+                                    'data': JSON.stringify(img3b64)
+                                },
+                                cache: true,
+                                success: function(response) {
+                                    Swal.fire({
+                                        title: 'update successfuly',
+                                        icon: 'success',
+                                        html: 'Auto close in <b></b> milliseconds.',
+                                        timer: 1000,
+                                        timerProgressBar: true,
+                                        allowOutsideClick: false,
+                                        didOpen: () => {
+                                            Swal.showLoading()
+                                            const b = Swal.getHtmlContainer().querySelector('b')
+                                            timerInterval = setInterval(() => {
+                                                b.textContent = Swal.getTimerLeft()
+                                            }, 100)
+                                        },
+                                        willClose: () => {
+                                            clearInterval(timerInterval)
+                                        }
+                                    }).then(() => {
+                                        location.reload();
+                                    })
+                                },
+                                error: function(response) {
+                                    console.log(response)
+                                },
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'No changes applied !',
+                                icon: 'info',
+                                html: 'Auto close in <b></b> milliseconds.',
+                                timer: 1000,
+                                timerProgressBar: true,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                    const b = Swal.getHtmlContainer().querySelector('b')
+                                    timerInterval = setInterval(() => {
+                                        b.textContent = Swal.getTimerLeft()
+                                    }, 100)
+                                },
+                                willClose: () => {
+                                    clearInterval(timerInterval)
+                                }
+                            }).then(() => {
+                                location.reload();
+                            })
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'No changes applied !',
+                        icon: 'info',
+                        html: 'Auto close in <b></b> milliseconds.',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    }).then(() => {
+                        location.reload();
+                    })
+                }
+            })
+        }
+    </script>
+    <script>
+        function umg2() {
+            Swal.fire({
+                title: 'Select from photos',
+                html: '<div class="row"> {% for i in imgs %} <div class="col-4"> <a class="card" href="#" onclick="selected({{ i.id }})" > <img src="/media/{{ i.profile_image }}" style="height: 150px; width: 100%;"> </a> </div> {% endfor %} </div>',
+                showCloseButton: true,
+                focusConfirm: false,
+                width: 600,
+                showConfirmButton: false,
+            }).then((result) => {
+                if (result.isDismissed) {
+                    Swal.fire({
+                        title: 'No changes applied !',
+                        icon: 'info',
+                        html: 'Auto close in <b></b> milliseconds.',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    })
+                }
+            });
+        }
+    </script>
+    <script>
+        function umg() {
+            (async() => {
+                const {
+                    value: file
+                } = await Swal.fire({
+                    title: 'Current image',
+                    imageUrl: '/media/{{ user.profile_image }}',
+                    text: 'Select image',
+                    showCloseButton: true,
+                    imageWidth: 400,
+                    imageHeight: 350,
+                    imageAlt: 'Custom image',
+                    input: 'file',
+                    inputAttributes: {
+                        'accept': 'image/*',
+                        'aria-label': 'Upload your profile picture'
+                    }
+                })
+                if (file) {
+                    console.log(file);
+                    const reader = new FileReader()
+                    reader.onload = (e) => {
+                        Swal.fire({
+                            title: 'Do you want to save the changes?',
+                            imageUrl: e.target.result,
+                            imageWidth: 400,
+                            imageHeight: 350,
+                            allowOutsideClick: false,
+                            showDenyButton: true,
+                            denyButtonColor: "#DD6B55",
+                            confirmButtonText: 'Yes',
+                            denyButtonText: 'No',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                                var formdata = new FormData();
+                                formdata.append('img', file);
+                                console.log(formdata)
+                                $.ajax({
+                                    type: 'POST',
+                                    headers: {
+                                        "X-CSRFToken": csrftoken
+                                    },
+                                    url: "{% url 'update_profile_pic' %}",
+                                    data: formdata,
+                                    cache: false,
+                                    encType: 'multipart/form-data',
+                                    processData: false,
+                                    contentType: false,
+                                    success: function(response) {
+                                        Swal.fire({
+                                            title: 'Saved !',
+                                            icon: 'success',
+                                            html: 'Auto close in <b></b> milliseconds.',
+                                            timer: 1000,
+                                            timerProgressBar: true,
+                                            allowOutsideClick: false,
+                                            didOpen: () => {
+                                                Swal.showLoading()
+                                                const b = Swal.getHtmlContainer().querySelector('b')
+                                                timerInterval = setInterval(() => {
+                                                    b.textContent = Swal.getTimerLeft()
+                                                }, 100)
+                                            },
+                                            willClose: () => {
+                                                clearInterval(timerInterval)
+                                            }
+                                        }).then(() => {
+                                            location.reload();
+                                        })
+                                    },
+                                    error: function(response) {
+                                        console.log("error")
+                                    }
+                                })
+                            } else if (result.isDenied) {
+                                Swal.fire({
+                                    title: 'Change are not Saved !',
+                                    icon: 'info',
+                                    html: 'Auto close in <b></b> milliseconds.',
+                                    timer: 1000,
+                                    timerProgressBar: true,
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading()
+                                        const b = Swal.getHtmlContainer().querySelector('b')
+                                        timerInterval = setInterval(() => {
+                                            b.textContent = Swal.getTimerLeft()
+                                        }, 100)
+                                    },
+                                    willClose: () => {
+                                        clearInterval(timerInterval)
+                                    }
+                                }).then(() => {
+                                    umg();
+                                })
+                            }
+                        })
+                    }
+                    reader.readAsDataURL(file)
+                } else {
+                    Swal.fire({
+                        title: 'NO image uploaded !',
+                        icon: 'info',
+                        html: 'Auto close in <b></b> milliseconds.',
+                        timer: 1000,
+                        timerProgressBar: true,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+                    })
+                }
+            })()
+        }
+    </script>
+    {% include 'partials/regular_scripts.html' %} {% endblock %}
+    <!-- scripts -->

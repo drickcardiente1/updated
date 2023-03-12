@@ -1,0 +1,414 @@
+{% extends "validation_base.html" %}
+<!-- base -->
+{% block tittle %}LOGIN{% endblock %}
+<!-- tittle -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <div class="navbar-toggle d-inline">
+                <button type="button" class="navbar-toggler">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                </button>
+            </div>
+            <a class="navbar-brand" style="color: white;">TE MOTORBIKES LOGIN</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link text-primary">
+                        <i class="tim-icons icon-minimal-left"></i> Back To Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+<!-- navbar -->
+{% block content %}
+<div class="content">
+    <div class="container">
+        <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+            <div class="card card-login card-white">
+                <div class="card-header">
+                    <img src="/static/img/card-primary.png" alt="">
+                    <h1 class="card-title">Log in</h1>
+                </div>
+                <div class="card-body">
+<!-- here -->
+                    <form class="form">
+                        {% csrf_token %}
+                        <p id="uname_message" style="margin: 0; color: red;">
+                        </p>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="tim-icons icon-single-02"></i>
+                                </div>
+                            </div>
+                            {{ form.username }}
+                        </div>
+                        <p id="pwd_message" style="margin: 0; color: red;">
+                        </p>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="tim-icons icon-lock-circle" data-toggle="#pwd" id="tagler"></span>
+                                </div>
+                            </div>
+                            {{ form.password }}
+                        </div>
+                        <a type="submit" class="btn btn-primary btn-lg btn-block mb-1" style="color:white;" onclick="sbmt()">LOG IN</a>
+                    </form>
+
+                    <div class="card-footer">
+
+                        <div class="pull-center text-center">
+                            <div> Dont have account ?
+                                <a href="{% url 'signup' %}"> Create Account</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-center">
+                            OR
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <a class="btn btn-simple btn-facebook">
+                                Connect with Facebook
+                                <i class="fab fa-facebook-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a class="btn btn-simple btn-google" href=""
+                                onclick="PopCenter(this.href,'targetWindow','500','500', {toolbar:0, resizable:0, location:0, menubar:0, status:0});return false">
+                                <i class="fab fa-google-plus-g"></i>
+                                Connect with Google+
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="pull-left text-left">
+                        <div>
+                            <a href="#" onclick="check()" >Forgot password ?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- content -->
+{% block scripts %}
+<link rel="stylesheet" href="sweetalert2.min.css" type="text/html">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" type="application/javascript"></script>
+<script src="/static/js/pop.js"></script>
+<script>
+    function check() {
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        Swal.fire({
+            title: 'Submit your Github username',
+            input: 'email',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            confirmButtonText: 'send',
+            showLoaderOnConfirm: true,
+            preConfirm: (value) => {
+                return fetch("{% url 'forgot_password' %}", {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({ 'data': value }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            let timerInterval
+                            // success here
+                            Swal.fire({
+                                title: 'Password Reset for ' + value,
+                                allowOutsideClick: false,
+                                html:
+                                    '<label for="my-input">Enter New password</label>' +
+                                    '<div class="input-group">' +
+                                    '<div class="input-group-prepend">' +
+                                    '<div class="input-group-text">' +
+                                    '<span class="tim-icons icon-lock-circle" onclick="play()" id="spn" style="color:black;"></span>' +
+                                    '</div></div>{{ form2.password }}</div>' +
+                                    '<p id="nwpwd_message" style="margin: 0; color: red;"></p>' +
+                                    '<br><label for="my-input">Enter OTP</label><br>' +
+                                    '<div class="input-group">' +
+                                    '<div class="input-group-prepend">' +
+                                    '<div class="input-group-text">' +
+                                    '<span class="tim-icons icon-key-25" style="color:black;"></span>' +
+                                    '</div></div>{{ form2.otp }}</div>' +
+                                    '<p id="otp_message" style="margin: 0; color: red;"></p>' +
+                                    '<br/> Auto Cancel until (<strong></strong>) Seconds.',
+                                customClass: {
+                                    validationMessage: 'my-validation-message'
+                                },
+                                timer: 120000,
+                                focusConfirm: false,
+                                showDenyButton: true,
+                                showConfirmButton: true,
+                                confirmButtonText: 'Submit',
+                                confirmButtonColor: "#008000",
+                                showDenyButton: true,
+                                denyButtonText: 'Cancel',
+                                denyButtonColor: "#ff0000",
+                                timerProgressBar: true,
+                                didOpen: () => {
+                                    const content = Swal.getHtmlContainer()
+                                    const $ = content.querySelector.bind(content)
+                                    timerInterval = setInterval(() => {
+                                        Swal.getHtmlContainer().querySelector('strong')
+                                            .textContent = (Swal.getTimerLeft() / 1000)
+                                            .toFixed(0)
+                                    }, 100)
+                                },
+                                willClose: (result) => {
+                                    clearInterval(timerInterval)
+                                },
+                                preConfirm: () => {
+                                    val1 = document.getElementById('nwpwd').value;
+                                    val2 = document.getElementById('otp').value;
+                                    var TableData = {
+                                        "email": value
+                                        , "otp": val2
+                                        , "password": val1
+                                    };
+                                    return fetch("{% url 'newpwd_confirmation' %}", {
+                                        method: 'POST',
+                                        credentials: 'same-origin',
+                                        headers: {
+                                            'Accept': 'application/json',
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'X-CSRFToken': csrftoken,
+                                        },
+                                        body: JSON.stringify({ 'TableData': TableData }),
+                                    })
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                            // last updated
+                                            if (data['data']) {
+                                                clearInterval(timerInterval)
+                                                Swal.fire({
+                                                title: data['data'],
+                                                showClass: {
+                                                    popup: 'animate__animated animate__fadeInDown'
+                                                },
+                                                hideClass: {
+                                                    popup: 'animate__animated animate__fadeOutUp'
+                                                }
+                                                }).then(success => {
+                                                    console.log("success here")
+                                                    location.reload()
+                                                }).catch(error => {
+                                                    Swal.showValidationMessage(
+                                                        `Request failed`
+                                                    )
+                                                })
+                                            }
+                                            else if (data['otp'] && data['password']) {
+                                                document.getElementById("otp").style.border = "solid #ff0000";
+                                                document.getElementById("otp_message").innerHTML = data['otp'];
+                                                document.getElementById("nwpwd").style.border = "solid #ff0000";
+                                                document.getElementById("nwpwd_message").innerHTML = data['password'];
+                                                Swal.showValidationMessage(
+                                                    '<i class="fa fa-info-circle" style="color:red;"></i> Request failed'
+                                                )
+                                            }
+                                            else if (data['otp']) {
+                                                document.getElementById("otp").style.border = "solid #ff0000";
+                                                document.getElementById("otp_message").innerHTML = data['otp'];
+                                                Swal.showValidationMessage(
+                                                    `Request failed: ${data['otp']}`
+                                                )
+                                            }
+                                            else if (data['non_field_errors']) {
+                                                document.getElementById("otp").style.border = "solid #ff0000";
+                                                Swal.showValidationMessage(
+                                                    `Request failed: ${data['non_field_errors']}`
+                                                )
+                                            }
+                                            else if (data['password']) {
+                                                document.getElementById("nwpwd").style.border = "solid #ff0000";
+                                                document.getElementById("nwpwd_message").innerHTML = data['password'];
+                                                Swal.showValidationMessage(
+                                                    `Request failed: ${data['password']}`
+                                                )
+                                            }
+                                            else if (data['detail']) {
+                                                clearInterval(timerInterval)
+                                                Swal.fire({
+                                                title: data['detail'],
+                                                showClass: {
+                                                    popup: 'animate__animated animate__fadeInDown'
+                                                },
+                                                hideClass: {
+                                                    popup: 'animate__animated animate__fadeOutUp'
+                                                }
+                                                }).then(() => {
+                                                    check();
+                                                }).catch(error => {
+                                                    Swal.showValidationMessage(
+                                                        `Request failed`
+                                                    )
+                                                })
+                                            }
+                                            else {
+                                                Swal.showValidationMessage(
+                                                    `Request failed`
+                                                )
+                                            }
+                                        })
+                                        .catch(error => {
+                                            Swal.showValidationMessage(
+                                                '<i class="fa fa-info-circle" style="color:red;"></i> Request failed: Server configuration error'
+                                            )
+                                        })
+                                }
+                            }).then((result) => {
+                                if (result.dismiss == 'timer') {
+                                    Swal.fire({
+                                        title: 'Time is up',
+                                        html:'<label for="my-input">Please resend OTP</label>' ,
+                                        showClass: {
+                                            popup: 'animate__animated animate__fadeInDown'
+                                        },
+                                        hideClass: {
+                                            popup: 'animate__animated animate__fadeOutUp'
+                                        }
+                                    }).then(() => {
+                                        check();
+                                    })
+                                }
+                                else if (result.isDismissed) {
+                                    console.log("dismissed")
+                                } else if (result.isDenied) {
+                                    console.log("denied")
+                                } else {
+                                    console.log("else")
+                                }
+                            })
+                            // success end here
+                        }
+                        else if (data['detail']) {
+                            Swal.showValidationMessage(
+                                `Request failed: ${data['detail']}`
+                            )
+                        }
+                        else if (data['email']) {
+                            Swal.showValidationMessage(
+                                `Request failed: ${data['email']}`
+                            )
+                        }
+                        else {
+                            Swal.showValidationMessage(
+                                `Request failed: ${data['email']}`
+                            )
+                        }
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            '<i class="fa fa-info-circle" style="color:red;"></i> Request failed: Server configuration error'
+                        )
+                    })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+        })
+    };
+</script>
+<script>
+    function sbmt() {
+        Swal.fire({
+            title: 'Please Wait',
+            text: 'Validating Form',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        })
+        var TableData = {
+            "username": $("#username").val()
+            , "password": $("#pwd").val()
+
+        };
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrftoken },
+            url: "{% url 'login_proccess' %}",
+            data: { 'data': JSON.stringify(TableData) },
+            cache: true,
+            success: function (response) {
+                data = JSON.parse(response)
+                if (data.username) {
+                    err_messages(document.getElementById("username"), data.username[0], "uname_message")
+                }
+                if (data.password) {
+                    err_messages(document.getElementById("pwd"), data.password[0], "pwd_message")
+                }
+                if (data.detail) {
+                    Swal.fire({
+                        title: 'Request failed: ' + data.detail,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    })
+                }
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Welcome ' + data['success'],
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then((result) => {
+                        location.reload()
+                    })
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            },
+        });
+    };
+    var uname = document.getElementById("username");
+    var pss = document.getElementById("pwd");
+    let btns = [uname,pss];
+    btns.forEach(function (i) {
+        i.addEventListener("keypress", function() {
+            if (event.key === "Enter") {
+                sbmt()
+            }
+        });
+    });
+</script>
+<script src="/static/js/validate_msg.js"></script>
+<script src="/static/js/eye.js"></script>
+{% endblock %}
